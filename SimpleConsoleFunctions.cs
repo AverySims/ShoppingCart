@@ -3,7 +3,7 @@
  * make console applications more lightweight and less bloated
  */
 
-namespace FibonacciSequenceGenerator
+namespace ShoppingCart
 {
 	internal class SimpleConsoleFunctions
 	{
