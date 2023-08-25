@@ -59,7 +59,7 @@ namespace ShoppingCart
 		{
 			return double.TryParse(Console.ReadLine(), out val);
 		}
-
+	
 		public static string ParseEndingInput()
 		{
 			Console.WriteLine("Input any key to close program...");
