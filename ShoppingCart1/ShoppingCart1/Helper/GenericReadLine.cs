@@ -1,6 +1,8 @@
-﻿namespace ShoppingCart
+﻿using System;
+
+namespace GenericParse
 {
-	public class GenericParse
+	public class GenericReadLine
 	{
 		public static T TryReadLine<T>()
 		{
@@ -8,8 +10,8 @@
 			{
 				try
 				{
-					T value;
-					if (AttemptParse(Console.ReadLine(), out value))
+					// T value;
+					if (AttemptParse(Console.ReadLine(), out T value))
 					{
 						return value;
 					}
@@ -23,6 +25,7 @@
 			}
 		}
 
+		// meant for internal use only
 		private static bool AttemptParse<T>(string input, out T result)
 		{
 			try
@@ -38,4 +41,3 @@
 		}
 	}
 }
-
