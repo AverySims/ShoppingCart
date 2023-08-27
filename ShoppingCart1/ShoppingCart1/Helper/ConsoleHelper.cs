@@ -1,11 +1,9 @@
-﻿/*
- * This is a standalone class that holds 'common' functions that
- * make console applications more lightweight and less bloated
- */
+﻿using System;
+using GenericParse;
 
-namespace ShoppingCart
+namespace CustomConsole
 {
-	internal class SimpleConsoleFunctions
+	static class ConsoleHelper
 	{
 		public static void SelectEndingAction(out bool mainLoop)
 		{
@@ -20,7 +18,7 @@ namespace ShoppingCart
 
 			while (loopEndingSelector)
 			{
-				ParseIntEC(out int userSelection);
+				int userSelection = GenericReadLine.TryReadLine<int>();
 				switch (userSelection)
 				{
 					case 1:
@@ -50,33 +48,33 @@ namespace ShoppingCart
 
 		#region Parsing
 		// EC = Error correction
-		public static bool ParseIntEC(out int val)
+		// function is private because we have a better version in 'GenericReadLine' class
+		private static bool ParseIntEC(out int val)
 		{
 			return int.TryParse(Console.ReadLine(), out val);
 		}
-
-		public static bool ParseDoubleEC(out double val)
+		// function is private because we have a better version in 'GenericReadLine' class
+		private static bool ParseDoubleEC(out double val)
 		{
 			return double.TryParse(Console.ReadLine(), out val);
 		}
-	
-		public static string ParseEndingInput()
+
+		public static ConsoleKeyInfo UserEndProgram()
 		{
 			Console.WriteLine("Input any key to close program...");
-			// in-case of a null string
-			return Console.ReadLine() ?? " ";
+			return Console.ReadKey();
 		}
 		#endregion
 
 		#region Printing
 		public static void PrintBlank()
 		{
-			Console.WriteLine("");
+			Console.WriteLine();
 		}
 
-		public static void PrintValue(int val)
+		public static void PrintValue<T>(T val)
 		{
-			Console.WriteLine("Value is: " + val);
+			Console.WriteLine($"Value is: {val}");
 		}
 
 		public static void PrintInvalidSelection()
