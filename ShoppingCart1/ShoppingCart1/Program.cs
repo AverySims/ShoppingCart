@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using CustomConsole;
+﻿using CustomConsole;
 using GenericParse;
 
 namespace ShoppingCartApp
@@ -7,31 +6,34 @@ namespace ShoppingCartApp
 	class Program
 	{
 		// List variable where all items are stored
-		public static List<CartItem> ShoppingCart = new List<CartItem>();
+		public static List<CartItem> ShoppingCart = new();
 		
 		// Pre-defined items, can add items when needed
 		public static CartItem[] PreDefinedItems = {
-			new CartItem("Apple", 0.5),
-			new CartItem("Banana", 0.3),
-			new CartItem("Orange", 0.6)
+			new("Apple", 0.5),
+			new("Banana", 0.3),
+			new("Orange", 0.6),
+			new("Mango", 0.8),
+			new("Pear", 0.7),
+			new("Toothbrush", 0.2)
 		};
 		
 		// string array that displays menu selections
-		private static ImmutableArray<string> _menuOptions = ImmutableArray.Create(new string[]
+		private static readonly string[] MenuOptions =
 		{ "Add item to cart",
 			"View items in cart",
 			"View total price",
-			"Exit program" });
-        
+			"Exit program"
+		};
+		
 		// Main() is set to async so the Task.Delay() can pause the
 		// Console.Writeline() functions to keep information on screen
 		// longer without having to print the same lines multiple times
 		static async Task Main(string[] args)
 		{
 			bool loopMain = true;
-			// storing the user selection in a local var
-			// so we can change loopMain behaviour when
-			// loop is finished
+			// storing the user selection in a local var so we can
+			// change loopMain behaviour when the loop is finished
 			int tempInt;
 
 			while (loopMain)
@@ -55,9 +57,9 @@ namespace ShoppingCartApp
 		static void PrintMenu()
 		{
 			Console.WriteLine("- - - Menu - - -");
-			for (int i = 0; i < _menuOptions.Length; i++)
+			for (int i = 0; i < MenuOptions.Length; i++)
 			{
-				Console.WriteLine($"{i + 1}. {_menuOptions[i]}");
+				Console.WriteLine($"{i + 1}. {MenuOptions[i]}");
 			}
 		}
 
