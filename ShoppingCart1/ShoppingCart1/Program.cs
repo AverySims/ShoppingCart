@@ -25,91 +25,96 @@ namespace ShoppingCartApp
 			"View total price",
 			"Exit program"
 		};
-		
-		// Main() is set to async so the Task.Delay() can pause the
-		// Console.Writeline() functions to keep information on screen
-		// longer without having to print the same lines multiple times
-		static async Task Main(string[] args)
-		{
-			bool loopMain = true;
-			// storing the user selection in a local var so we can
-			// change loopMain behaviour when the loop is finished
-			int tempInt;
 
-			while (loopMain)
+		private static bool _loopMain = true;
+
+		static void Main(string[] args)
+		{
+			// getting array length to find the range of selectable menu options
+			int menuOptionCount = MenuOptions.Length;
+
+			while (_loopMain)
 			{
 				PrintMenu();
-				tempInt = SelectMenuOption();
-				// checking for program end
-				if (tempInt != 4)
-				{
-					await Task.Delay(2000);
-					Console.Clear();
-				}
-				else
-				{
-					loopMain = false;
-				}
+
+				SelectMenuOption(menuOptionCount);
 			}
 		}
 
 		#region Menu
 		static void PrintMenu()
 		{
+			// clearing console to prevent clutter
+			Console.Clear();
+			
 			Console.WriteLine("- - - Menu - - -");
 			for (int i = 0; i < MenuOptions.Length; i++)
 			{
 				Console.WriteLine($"{i + 1}. {MenuOptions[i]}");
 			}
+			ConsoleHelper.PrintBlank();
 		}
 
-		static int SelectMenuOption()
+		static void SelectMenuOption(int menuOptions)
 		{
-			bool loopTemp = true;
-			int tempSelect = 0;
+			_loopMain = true;
 
-			while (loopTemp)
+			// looping until a valid option is selected
+			while (true)
 			{
-				tempSelect = GenericReadLine.TryReadLine<int>();
+				Console.Write("Select option: ");
+				int tempSelect = GenericReadLine.TryReadLine<int>();
 
-				switch (tempSelect)
+				if (!SwitchOnMenuSelection(tempSelect))
 				{
-					case 1:
-						loopTemp = false;
-						AddItem();
-						break;
-					case 2:
-						loopTemp = false;
-						ViewCart();
-						break;
-					case 3:
-						loopTemp = false;
-						CalculateTotal();
-						break;
-					case 4:
-						loopTemp = false;
-						Console.WriteLine("Exiting program.");
-						return tempSelect;
-					default:
-						ConsoleHelper.PrintInvalidSelection();
-						break;
+					break;
 				}
+			}
+		}
 
-				loopTemp = false;
+		static bool SwitchOnMenuSelection(int selection)
+		{
+			bool tempReturnValue = true;
+
+			// clearing console and printing menu again to prevent clutter
+			Console.Clear();
+			PrintMenu();
+
+			switch (selection)
+			{
+				case 1: // Add item to cart
+					AddItem();
+					break;
+				case 2: // View items in cart
+					ViewCart();
+					break;
+				case 3: // View total price
+					CalculateTotal();
+					break;
+				case 4: // Exit program
+					tempReturnValue = false;
+					_loopMain = false;
+					Console.WriteLine("Exiting program.");
+					break;
+				default: // Invalid selection
+					ConsoleHelper.PrintInvalidSelection();
+					break;
 			}
 
-			return tempSelect;
+			ConsoleHelper.PrintBlank();
+			// returning true will keep the program running, false will exit the program
+			return tempReturnValue;
 		}
 		#endregion
 
 		#region Items
 		private static void AddItem()
 		{
+			// clearing console and printing items again to prevent clutter
 			Console.Clear();
-			// printing available items
 			PrintItems();
 
-			// user inputs item index based on PrintItems()
+			// user inputs desired item
 			Console.Write("Enter the item number: ");
 			// Inline variable declaration
 			SelectItemNumber(out int tempSelect);
@@ -122,6 +127,10 @@ namespace ShoppingCartApp
 			// checking shoppingCart to see if selected item is already in cart
 			CartItem selectedItem = PreDefinedItems[tempSelect - 1];
 			CartItem existingItem = ShoppingCart.FirstOrDefault(item => item.Name == selectedItem.Name);
+
+			// clearing console and printing menu again to prevent clutter
+			Console.Clear();
+			PrintMenu();
 
 			if (existingItem != null) // we change the quantity of the item IN the shoppingCart list
 			{
@@ -175,6 +184,7 @@ namespace ShoppingCartApp
 			{
 				Console.WriteLine($"{i + 1}. {PreDefinedItems[i].Name} - ${PreDefinedItems[i].Price} each");
 			}
+			ConsoleHelper.PrintBlank();
 		}
 		#endregion
 
