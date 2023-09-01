@@ -47,18 +47,6 @@ namespace CustomConsole
 		}
 
 		#region Parsing
-		// EC = Error correction
-		// function is private because we have a better version in 'GenericReadLine' class
-		private static bool ParseIntEC(out int val)
-		{
-			return int.TryParse(Console.ReadLine(), out val);
-		}
-		// function is private because we have a better version in 'GenericReadLine' class
-		private static bool ParseDoubleEC(out double val)
-		{
-			return double.TryParse(Console.ReadLine(), out val);
-		}
-
 		public static ConsoleKeyInfo UserEndProgram()
 		{
 			Console.WriteLine("Input any key to close program...");
@@ -66,7 +54,30 @@ namespace CustomConsole
 		}
 		#endregion
 
-		#region Printing
+		#region Menu Printing
+		public static void PrintStrings(string[] strings)
+		{
+			for (int i = 0; i < strings.Length; i++)
+			{
+				Console.WriteLine($"{i + 1}. {strings[i]}");
+			}
+		}
+
+		public static void PrintStrings(string[][] strings)
+		{
+			int tempIndex = 0;
+			foreach (var menu in strings)
+			{
+				for (int i = 0; i < menu.Length; i++)
+				{
+					tempIndex++;
+					Console.WriteLine($"{tempIndex}. {menu[i]}");
+				}
+			}
+		}
+		#endregion
+
+		#region Basic Printing
 		public static void PrintBlank()
 		{
 			Console.WriteLine();
@@ -74,13 +85,18 @@ namespace CustomConsole
 
 		public static void PrintValue<T>(T val)
 		{
-			Console.WriteLine($"Value is: {val}");
+			Console.WriteLine($"{nameof(val)} is: {val}");
 		}
 
 		public static void PrintInvalidSelection()
 		{
-			Console.WriteLine("Invalid selection, please select a listed option.");
+			Console.WriteLine("Invalid entry, please try again.");
 		}
 		#endregion
+		
+		public static bool ListEmpty<T>(List<T> list)
+		{
+			return !(list.Count > 0);
+		}
 	}
 }
