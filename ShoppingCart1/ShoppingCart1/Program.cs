@@ -9,7 +9,7 @@ namespace ShoppingCartApp
 		public static List<CartItem> ShoppingCart = new();
 		
 		// Pre-defined items, can add items when needed
-		public static CartItem[] PreDefinedItems = {
+		public static List<CartItem> PreDefinedItems = new() {
 			new("Apple", 0.5),
 			new("Banana", 0.3),
 			new("Orange", 0.6),
@@ -35,6 +35,8 @@ namespace ShoppingCartApp
 
 			while (_loopMain)
 			{
+				Console.Clear();
+				
 				PrintMenu();
 
 				SelectMenuOption(menuOptionCount);
@@ -44,28 +46,17 @@ namespace ShoppingCartApp
 		#region Menu
 		static void PrintMenu()
 		{
-			// clearing console to prevent clutter
-			Console.Clear();
-			
-			Console.WriteLine("- - - Menu - - -");
-			for (int i = 0; i < MenuOptions.Length; i++)
-			{
-				Console.WriteLine($"{i + 1}. {MenuOptions[i]}");
-			}
-			ConsoleHelper.PrintBlank();
+			Console.WriteLine("Shopping Cart App");
+			ConsoleHelper.PrintStrings(MenuOptions);
 		}
 
 		static void SelectMenuOption(int menuOptions)
 		{
-			_loopMain = true;
-
-			// looping until a valid option is selected
 			while (true)
 			{
+				ConsoleHelper.PrintBlank();
 				Console.Write("Select option: ");
-				int tempSelect = GenericReadLine.TryReadLine<int>();
-
-				if (!SwitchOnMenuSelection(tempSelect))
+				if (!SwitchOnMenuSelection(GenericReadLine.TryReadLine<int>()))
 				{
 					break;
 				}
@@ -79,7 +70,7 @@ namespace ShoppingCartApp
 			// clearing console and printing menu again to prevent clutter
 			Console.Clear();
 			PrintMenu();
-
+			ConsoleHelper.PrintBlank();
 			switch (selection)
 			{
 				case 1: // Add item to cart
@@ -100,8 +91,6 @@ namespace ShoppingCartApp
 					ConsoleHelper.PrintInvalidSelection();
 					break;
 			}
-
-			ConsoleHelper.PrintBlank();
 			// returning true will keep the program running, false will exit the program
 			return tempReturnValue;
 		}
@@ -131,7 +120,9 @@ namespace ShoppingCartApp
 			// clearing console and printing menu again to prevent clutter
 			Console.Clear();
 			PrintMenu();
-
+			
+			ConsoleHelper.PrintBlank();
+			
 			if (existingItem != null) // we change the quantity of the item IN the shoppingCart list
 			{
 				existingItem.AddQuantity(tempQuantity);
@@ -150,7 +141,7 @@ namespace ShoppingCartApp
 			while (true)
 			{
 				input = GenericReadLine.TryReadLine<int>();
-				if (input >= 1 && input <= PreDefinedItems.Length)
+				if (input > 0 && input <= PreDefinedItems.Count)
 				{
 					break;
 				}
@@ -180,7 +171,7 @@ namespace ShoppingCartApp
 		private static void PrintItems()
 		{
 			Console.WriteLine("Available items:");
-			for (int i = 0; i < PreDefinedItems.Length; i++)
+			for (int i = 0; i < PreDefinedItems.Count; i++)
 			{
 				Console.WriteLine($"{i + 1}. {PreDefinedItems[i].Name} - ${PreDefinedItems[i].Price} each");
 			}
@@ -190,7 +181,7 @@ namespace ShoppingCartApp
 
 		static void ViewCart()
 		{
-			if (ShoppingCart.Count == 0)
+			if (ShoppingCart.Count < 1)
 			{
 				Console.WriteLine("Your cart is empty.");
 			}
